@@ -3,8 +3,7 @@ Aperture Inventory Management System
 
 Web App functionality
 The Aperture Inventory Management System has functionality enabling the user to:
-
-•	View the current inventory and sales 
+•	View the current inventory and sales /n
 •	Update the stock of the current inventory (increase and decrease) 
 •	Search the current inventory by product name or product category
 •	Add products 
