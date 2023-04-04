@@ -1,0 +1,36 @@
+version: "3"
+services:
+  sale-app:
+    #can give the container a name-otherwise docker will give automatic name
+    container_name: sale-app-1
+    #image used to create docker container
+    #first, need to go to command line to create this image- run docker-compose
+    #^ for this, need to be in the project directory
+    #it will give an error if we do not build first
+    image: sale-app
+    #for when the container fails when it sees that mysql is not yet running
+    restart: always
+    build: . #all files in the directory - it builds based off of the dockerFile- so need to add that
+    ports:
+      - 8081:8080 
+    environment: 
+      MYSQL_HOST: mysqldb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_PORT: 3306
+    #can also db: here (depends on) so some containers are started before others
+    #e.g. the mysqldb is started first - instead of doing restart: always?- but have to be 
+    #careful with this- can take long 
+      
+  mysqldb:
+    container_name: mysqldb
+    image: mysql
+    #need to persist data in host machine direcotry- otherwise when container
+    # is taken down, data is taken down with it- done via volume
+    volumes:
+      - C:/Users/44746/mysqldb:/var/lib/mysql
+    ports:
+      - 3307:3306 #3306 = internal port for mysql 
+    environment:
+      MYSQL_DATABASE: inventory
+      MYSQL_ROOT_PASSWORD: root
