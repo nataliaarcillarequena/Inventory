@@ -2,7 +2,12 @@ package com.inventory.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -190,6 +195,25 @@ public class InventoryServiceImpl implements InventoryService {
 	public Product getProduct(int prodId) {
 		Product prod = restTemplate.getForObject("http://localhost:8080/products/"+prodId, Product.class);
 		return prod;
+	}
+
+	//aggregating sales data via product category to plot on a time series
+	@Override
+	public Map<String, Map<LocalDate, Integer>> aggreggatedData() {
+		
+		//the start and end dates in the sales database 
+		LocalDate start = LocalDate.of(2023, 3, 1);
+		LocalDate end = LocalDate.of(2023, 3, 30);
+		List<Inventory> allInventory = salesBetweenDates(start, end);
+		
+		//using stream to group by the product categories and sales dates, and sum the daily sales
+		//over each category for each day (for the 1 month that the business has been alive)
+		Map<String, Map<LocalDate, Integer>> aggregatedMap = allInventory.stream()
+                .collect(Collectors.groupingBy(Inventory::getProductCategory, 
+                                Collectors.groupingBy(Inventory::getSaleDate, 
+                                        Collectors.summingInt(inven -> inven.getSalesAmount()))));
+		
+		return aggregatedMap;
 	}
 	
 

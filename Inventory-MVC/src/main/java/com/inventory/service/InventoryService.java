@@ -2,6 +2,7 @@ package com.inventory.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import com.inventory.entity.Inventory;
 import com.inventory.entity.Product;
@@ -28,5 +29,8 @@ public interface InventoryService {
 	
 	//return a product from the product dataset via productId
 	public Product getProduct(int prodId);
+	
+	//aggregating sales data to plot on a time series
+	public Map<String, Map<LocalDate, Integer>> aggreggatedData();
 	
 }
